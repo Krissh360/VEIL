@@ -60,10 +60,11 @@ Run lint, typecheck, test and check:bundle before every commit.
 
 ## Design
 
-- Follow `docs/DESIGN.md` exactly. Tokens live in one CSS file and are used everywhere.
-- Theme is a redacted document: ink on paper. The solid ink bar is the only recurring motif and appears only where it reflects real state.
-- No emoji, gradients, shadows, illustrations or decorative badges. No control that does nothing.
-- Copy is plain, specific and in sentence case. Banned words are listed in `docs/DESIGN.md`.
+- `docs/DESIGN.md` holds the general standards. `docs/BRAND.md` holds what is specific to VEIL. Read both before touching any UI. Where they conflict, stop and ask.
+- Theme: ink on paper. The solid ink bar is the only recurring motif and appears only where it reflects real state.
+- One vocabulary: cover, covered, cover mode. Never claim safety.
+- Covers on web pages appear instantly, with no animation.
+- No emoji, gradients, shadows, illustrations, privacy clichés (padlocks, shields, eyes) or controls that do nothing.
 
 ## Measurement and claims
 
