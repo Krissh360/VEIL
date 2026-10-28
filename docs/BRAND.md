@@ -49,7 +49,7 @@ Nowhere else. No bars as dividers, bullets, loading indicators, chart fills or d
 
 - Covers appear instantly. No fade, no transition, no animation of any kind, because content must never be visible during a transition.
 - Stage 1 adds no on-page UI other than the covers themselves and the fail-closed screen. No badges, no tooltips, no hover reveal. Anything injected into the page can end up in a screenshot.
-- Fail-closed screen: full viewport, paper background, an 8px ink bar across the top, then two lines of text at 16px and 14px: "Cover paused" and "VEIL hit an error and is hiding this page. Turn cover mode off from the toolbar to continue." Provide a dark variant.
+- Fail-closed screen: full viewport, paper background, an 8px ink bar across the top, then two lines of text at 16px and 14px: "Cover paused" and "VEIL hit an error and has covered this page. Turn cover mode off from the toolbar to continue." Provide a dark variant.
 
 ## Toolbar icon
 
