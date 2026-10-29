@@ -30,7 +30,7 @@
     "lint": "eslint .",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
+    "typecheck": "tsc -p tsconfig.json && tsc -p src/engine/tsconfig.json && tsc -p tsconfig.node.json",
     "check:bundle": "node scripts/check-bundle.ts",
     "check:contrast": "node scripts/check-contrast.ts",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run test && npm run build && npm run check:bundle && npm run check:contrast && playwright test"

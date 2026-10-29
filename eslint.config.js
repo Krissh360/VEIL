@@ -9,7 +9,7 @@ export default tseslint.config(
   {
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.node.json'],
+        project: ['./tsconfig.json', './src/engine/tsconfig.json', './tsconfig.node.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -18,6 +18,17 @@ export default tseslint.config(
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
       'no-console': 'error',
+    },
+  },
+  {
+    files: ['src/engine/**/*.ts'],
+    rules: {
+      'no-restricted-globals': [
+        'error',
+        ...['window', 'document', 'navigator', 'location', 'chrome', 'self', 'globalThis'].map(
+          (name) => ({ name, message: 'src/engine is pure: no DOM or browser APIs.' }),
+        ),
+      ],
     },
   },
   { files: ['**/*.js'], ...tseslint.configs.disableTypeChecked },
