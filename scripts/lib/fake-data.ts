@@ -2,6 +2,7 @@
 // check digits. A random checksum-valid number can coincide with a real person's number
 // by chance, so never publish, share or paste these values as if they were fictional,
 // and never replace them with real data.
+import { CARD_ISSUERS, type CardIssuer } from '../../src/engine/card.ts';
 import { PAN_HOLDER_CODES } from '../../src/engine/pan.ts';
 import { luhnCheckDigit, verhoeffCheckDigit } from '../../src/engine/validators.ts';
 
@@ -38,6 +39,13 @@ export function fakeAadhaar(rng: Rng, grouped = false): string {
   const payload = String(2 + rng.int(8)) + rng.digits(10);
   const value = payload + String(verhoeffCheckDigit(payload));
   return grouped ? `${value.slice(0, 4)} ${value.slice(4, 8)} ${value.slice(8)}` : value;
+}
+
+/** A Luhn-valid card number with a prefix and length that `issuer` allows. */
+export function fakeCard(rng: Rng, issuer: CardIssuer = rng.pick(CARD_ISSUERS)): string {
+  const [low, high] = rng.pick(issuer.prefixes);
+  const prefix = String(Number(low) + rng.int(Number(high) - Number(low) + 1));
+  return fakeLuhnNumber(rng, prefix, rng.pick(issuer.lengths));
 }
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
