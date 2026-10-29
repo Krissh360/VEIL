@@ -1,24 +1,18 @@
-# 0004 Permissions
+# 0004 Permissions: overview
 
-Status: proposed, pending owner confirmation of "cover automatically on this site" in Stage 1.
+Status: accepted. One record per permission follows.
 
-## Findings
+The manifest declares `activeTab`, `scripting`, `storage` and optional host access for `http://*/*` and `https://*/*`. It declares no `host_permissions`, no static `content_scripts`, no `tabs`, no `webNavigation` and no `unlimitedStorage`. `npm run check:bundle` fails if this set changes.
 
-- `activeTab` is granted by the toolbar action or a `commands` shortcut and ends when the tab navigates to a different site.
-- `permissions.request()` needs a user gesture; the popup button qualifies. Whether a `commands` event qualifies is not documented; assume it does not.
-- `registerContentScripts` persists across sessions by default. One invalid entry fails the whole call.
+| Record                                                | Permission                      | First used in            |
+| ----------------------------------------------------- | ------------------------------- | ------------------------ |
+| [0006](0006-permission-activetab.md)                  | `activeTab`                     | Extension wiring         |
+| [0007](0007-permission-scripting.md)                  | `scripting`                     | Extension wiring         |
+| [0008](0008-permission-storage.md)                    | `storage`                       | Extension wiring         |
+| [0009](0009-permission-optional-host-permissions.md)  | `optional_host_permissions`     | Extension wiring         |
 
-## Decision
+All four are declared now so the manifest can be reviewed once, but nothing calls them yet.
 
-| Permission | Reason |
-|---|---|
-| `activeTab` | Cover the current tab at the moment the user acts, without any broad grant. |
-| `scripting` | Inject the content script into the tab on first use and register per-site scripts. |
-| `storage` | Settings, the per-site list, and per-tab state in `storage.session`. |
-| `optional_host_permissions` `http://*/*`, `https://*/*` | Requested per origin at runtime, from the popup click, only when the user turns on "Cover automatically on this site". Origin patterns are the exact origin. |
+Minimum Chrome version is 119: `matchOriginAsFallback` for `about:blank`, `data:` and `blob:` frames needs it, and the Custom Highlight API has been available since 105.
 
-No `tabs`, `webNavigation` or broad `host_permissions`. No `unlimitedStorage`.
-
-Minimum Chrome version 119 (`matchOriginAsFallback` for `about:blank`, `data:` and `blob:` frames; Highlight API since 105).
-
-On "Cover automatically" turned on: request the origin, register a content script for it (`allFrames`, `matchOriginAsFallback`, `document_start`). On turned off: unregister and remove the origin permission. Hostnames are persisted; detected values never are.
+Hostnames the user turns "Cover automatically" on for are persisted. Detected values never are.
