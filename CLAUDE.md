@@ -20,15 +20,19 @@ Breaking any of these is a bug, even if tests pass.
 
 Defined in `package.json` (keep this list current when scripts change):
 
-- `npm run build` builds the extension
-- `npm run test` unit and property tests
-- `npm run test:e2e` Playwright tests against the built extension
-- `npm run lint` and `npm run typecheck`
-- `npm run check:bundle` fails on network APIs in the bundle
-- `npm run check:contrast` verifies design token contrast
-- `npm run metrics` prints precision, recall and scan time per detector and fixture
+- `npm run build` builds the unpacked extension into `dist/`
+- `npm run test` Vitest unit tests (scripts now; engine and property tests later)
+- `npm run test:e2e` builds, then runs Playwright against `dist/` in Chromium
+- `npm run lint` ESLint, `npm run typecheck` tsc for `src/` and for scripts and tests
+- `npm run format:check` Prettier check, `npm run format` rewrites files
+- `npm run gen:tokens` regenerates `src/extension/tokens.css` from `docs/BRAND.md`
+- `npm run check:bundle` fails on network APIs, eval, remote URLs, widened permissions or a weak CSP in `dist/`
+- `npm run check:contrast` verifies token contrast (WCAG AA) and that `tokens.css` is current
+- `npm run check` runs all of the above in order
 
-Run lint, typecheck, test and check:bundle before every commit.
+Not yet defined: `npm run metrics` (precision, recall and scan time per detector and fixture) arrives with the corpus milestone.
+
+Run `npm run check` before every commit.
 
 ## Structure
 
