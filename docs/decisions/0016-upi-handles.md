@@ -9,7 +9,7 @@ Status: accepted, with a verification caveat (see below).
 - A UPI ID is a local part of 2 to 64 characters from `A-Z a-z 0-9 . _ -` (starting with a letter or digit), then `@`, then a handle from the configured list. Matching is case-insensitive.
 - The handle must end the name: a following letter, digit or underscore rejects it, and so does a dot or hyphen followed by more name. `asha@paytm.com` is therefore an email address, not a UPI ID, and `asha@paytm` is a UPI ID.
 - The list is a parameter of `createUpiDetector`. `detectUpi` uses `DEFAULT_UPI_HANDLES`.
-- Email detection needs a dot in the domain, so the two detectors cannot both claim the same text. If they ever overlap, the merge step prefers UPI (decision 0017).
+- Email detection needs a dot in the domain, so the two detectors cannot both claim the same text. If they ever overlap, the merge step prefers UPI (decision 0018).
 
 ## Verification status
 
