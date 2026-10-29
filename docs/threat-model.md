@@ -16,7 +16,7 @@ All of this happens inside the page's content script, on the device. Detected va
 
 ## What it cannot cover
 
-Text drawn inside images, canvas, video and PDFs is not covered, and there is no OCR. Names and addresses in free text are not covered because there is no reliable pattern for them. Browser interface outside the page, such as the address bar, tab titles, autofill suggestions and other extensions' popups, is outside the page and cannot be covered. Closed shadow roots cannot be read. Frames from another origin are covered only if the user has granted access to that origin. Values that no detector recognises are not covered, and the detectors have false positives and misses; their measured rates come from the metrics script and are reported with the results.
+Text drawn inside images, canvas, video and PDFs is not covered, and there is no OCR. Names and addresses in free text are not covered because there is no reliable pattern for them. Browser interface outside the page, such as the address bar, tab titles, autofill suggestions and other extensions' popups, is outside the page and cannot be covered. Closed shadow roots cannot be read. Frames from another origin are covered only if the user has granted access to that origin. Values that no detector recognises are not covered, and the detectors have false positives and misses; their measured rates come from the metrics script and are reported with the results. The known misses by construction are listed in `docs/detectors.md`: numbers in non-ASCII digits or split across lines or text nodes, handles, card issuers and token formats that are not in the recorded lists, and PANs outside the recorded fourth-letter set.
 
 ## Timing and navigation
 
