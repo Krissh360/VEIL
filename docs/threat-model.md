@@ -1,34 +1,37 @@
 # Threat model
 
-VEIL covers detected sensitive content in a tab so that screenshots, recordings and screen shares of the tab do not show it. It covers what it detects. It does not guarantee that nothing is exposed.
+First draft. It will be revised as the detectors and the cover layer are built.
 
-## Assets
+## What VEIL is for
 
-Text and form values on the page that match a detector or a field rule.
+VEIL covers sensitive content on a web page with solid fills while cover mode is on, so that a screenshot, a recording or a screen share of that tab does not show it. A Chrome extension cannot intercept operating-system screenshots, so VEIL does not try. It keeps the page covered all the time instead, and a capture taken while cover mode is on shows the covers.
 
-## In scope
+It covers what it detects. It does not guarantee that nothing is exposed.
 
-- Screenshots, recordings and screen shares of a tab while cover mode is on.
-- Content present at load and content added later by scripts.
-- Detection and covering entirely on the device. Detected values never leave the content script, are never logged and are never persisted. Messages carry counts by type and timings.
+## What it covers
 
-## Known limits (documented, not fixed)
+Text that matches a detector: email addresses, phone numbers (Indian mobile and a general international pattern), Aadhaar numbers (12 digits that pass the Verhoeff check), PAN, payment card numbers (Luhn), IFSC codes, UPI IDs, and common API keys and tokens. It also covers form fields by their type or autocomplete token: password inputs and fields marked as card number, one-time code or current password. It reads text nodes, form fields, open shadow roots and frames it can reach, and it keeps up with content that changes after load.
 
-- Text inside images, canvas, video and PDFs.
-- Names and addresses in free text.
-- Browser UI outside the page (address bar, tab titles, autofill popups, extension popups).
-- Closed shadow roots.
-- Cross-origin frames the extension has no host access to.
-- OS-level capture timing: a capture taken before cover mode is on, or before the first scan completes, shows the page.
-- Navigation to an origin without host access: the content script is not injected, so that page is not covered. The popup and badge report this state; see decision 0005.
-- Page scripts share `CSS.highlights` and can read the ranges VEIL registers (learning what was flagged) or clear them. A hostile page is out of scope for Stage 1.
-- Overlay elements for form fields are in the page DOM and visible to page scripts.
-- Regex detectors have false positives and misses. Measured numbers come from `npm run metrics`.
+All of this happens inside the page's content script, on the device. Detected values are not sent anywhere, not logged and not stored. The popup and the service worker receive only counts by type and timings. The extension contains no network code, which the bundle check enforces.
 
-## Failure behavior
+## What it cannot cover
 
-If the engine, scanner or scheduler errors, or a scan exceeds its time budget, while cover mode is on, VEIL covers the whole viewport with the fail-closed screen and reports the error.
+Text drawn inside images, canvas, video and PDFs is not covered, and there is no OCR. Names and addresses in free text are not covered because there is no reliable pattern for them. Browser interface outside the page, such as the address bar, tab titles, autofill suggestions and other extensions' popups, is outside the page and cannot be covered. Closed shadow roots cannot be read. Frames from another origin are covered only if the user has granted access to that origin. Values that no detector recognises are not covered, and the detectors have false positives and misses; their measured rates come from the metrics script and are reported with the results.
 
-## Related decisions
+## Timing and navigation
 
-0003 highlight findings, 0004 permissions, 0005 fail-closed, navigation and startup.
+Cover mode works per tab. A capture taken before cover mode is on, or before the first scan of a page has finished, shows the page as it is. To shorten that window, a page on a site with automatic cover keeps its content invisible until the first scan completes.
+
+Access granted through the toolbar button or the keyboard shortcut lasts only until the tab goes to a different site. After that, the extension cannot touch the new page unless the user has turned on automatic cover for that site. VEIL reports this state in the popup and on the toolbar badge instead of implying the page is covered. See decision 0005.
+
+## When something goes wrong
+
+If the engine or the cover layer fails, or a scan takes longer than its time budget, while cover mode is on, VEIL covers the whole viewport and reports the error. It does not leave the page partly covered.
+
+## Assumptions
+
+The user's browser and operating system are not compromised. The page is not actively hostile: its scripts share the `CSS.highlights` registry with VEIL and could read which ranges are covered or clear them, and overlay elements for form fields exist in the page's DOM where page scripts can see them. A page built to defeat VEIL is outside Stage 1. The user turns cover mode on before showing or capturing anything.
+
+## Related records
+
+0003 highlight findings, 0004 permissions, 0005 fail-closed, navigation and startup, 0011 content security policy.
