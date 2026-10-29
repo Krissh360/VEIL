@@ -25,6 +25,7 @@
   },
   "scripts": {
     "gen:tokens": "node scripts/gen-tokens.ts",
+    "gen:fake": "node scripts/generate-fake-data.ts",
     "build": "vite build",
     "test": "vitest run",
     "test:e2e": "npm run build && playwright test",

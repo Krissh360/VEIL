@@ -26,6 +26,7 @@ Defined in `package.json` (keep this list current when scripts change):
 - `npm run lint` ESLint, `npm run typecheck` tsc for `src/` and for scripts and tests
 - `npm run format:check` Prettier check, `npm run format` rewrites files
 - `npm run gen:tokens` regenerates `src/extension/tokens.css` from `docs/BRAND.md`
+- `npm run gen:fake -- --seed 1 --count 5` prints seeded fake Aadhaar numbers, emails and phones (local tests only)
 - `npm run check:bundle` fails on network APIs, eval, remote URLs, widened permissions or a weak CSP in `dist/`
 - `npm run check:contrast` verifies token contrast (WCAG AA) and that `tokens.css` is current
 - `npm run check` runs all of the above in order
