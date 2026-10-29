@@ -1,5 +1,5 @@
 import { parseArgs } from 'node:util';
-import { createRng, fakeAadhaar, fakeEmail, fakePhone } from './lib/fake-data.ts';
+import { createRng, fakeAadhaar, fakeEmail, fakePan, fakePhone } from './lib/fake-data.ts';
 
 const { values } = parseArgs({
   options: { seed: { type: 'string', default: '1' }, count: { type: 'string', default: '5' } },
@@ -20,6 +20,7 @@ process.stdout.write(
       seed,
       note: 'Fake values for local tests only. They can coincide with real ones by chance.',
       aadhaar: many(() => fakeAadhaar(rng, rng.int(2) === 0)),
+      pan: many(() => fakePan(rng)),
       email: many(() => fakeEmail(rng)),
       phone: many(() => fakePhone(rng)),
     },

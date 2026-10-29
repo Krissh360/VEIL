@@ -4,6 +4,7 @@ import {
   fakeAadhaar,
   fakeEmail,
   fakeLuhnNumber,
+  fakePan,
   fakePhone,
   PHONE_STYLES,
 } from '../../scripts/lib/fake-data.ts';
@@ -39,6 +40,13 @@ describe('fake data generator', () => {
       expect(value).toHaveLength(16);
       expect(value.startsWith('51')).toBe(true);
       expect(isValidLuhn(value)).toBe(true);
+    }
+  });
+
+  it('makes PANs with an allowed holder letter', () => {
+    const rng = createRng(6);
+    for (let i = 0; i < 200; i++) {
+      expect(fakePan(rng)).toMatch(/^[A-Z]{3}[ABCFGHJLPT][A-Z][0-9]{4}[A-Z]$/);
     }
   });
 
