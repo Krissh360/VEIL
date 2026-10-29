@@ -1,0 +1,58 @@
+/* Generated from docs/BRAND.md by scripts/gen-tokens.ts. Edit BRAND.md, then run npm run gen:tokens. */
+:root {
+  color-scheme: light dark;
+  --color-bg: #F7F6F3;
+  --color-surface: #FFFFFF;
+  --color-border: #E2DFD8;
+  --color-text-muted: #6B675E;
+  --color-text: #1A1917;
+  --color-ink: #111110;
+  --color-on-ink: #F7F6F3;
+  --color-accent: #2E4A7D;
+  --color-error: #B3261E;
+  --color-warning: #8A5A00;
+  --color-success: #2F6B3B;
+
+  --cover-color: #111110;
+
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+
+  --radius-sm: 8px;
+  --radius-lg: 12px;
+
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-size-12: 12px;
+  --font-size-14: 14px;
+  --font-size-16: 16px;
+  --font-size-24: 24px;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  --duration-fast: 150ms;
+  --ease-out: ease-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #121211;
+    --color-surface: #1A1A18;
+    --color-border: #2E2D2A;
+    --color-text-muted: #A19D93;
+    --color-text: #EDEBE6;
+    --color-ink: #EDEBE6;
+    --color-on-ink: #121211;
+    --color-accent: #8FA9DA;
+    --color-error: #F2A39D;
+    --color-warning: #E3B65C;
+    --color-success: #8CCB98;
+  }
+}

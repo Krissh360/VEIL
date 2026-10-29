@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "VEIL",
+  "description": "Covers sensitive content on a page with opaque fills, detected on the device.",
+  "minimum_chrome_version": "119",
+  "action": {
+    "default_title": "VEIL",
+    "default_popup": "popup/popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "commands": {
+    "toggle-cover": {
+      "suggested_key": { "default": "Alt+Shift+V" },
+      "description": "Turn cover on or off for this tab"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'"
+  }
+}

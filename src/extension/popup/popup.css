@@ -1,0 +1,28 @@
+body {
+  width: 360px;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-14);
+  font-weight: var(--weight-regular);
+  line-height: 1.5;
+}
+
+main {
+  padding: var(--space-16);
+}
+
+.wordmark {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--font-size-16);
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+}
+
+.muted {
+  margin: var(--space-8) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-12);
+}
