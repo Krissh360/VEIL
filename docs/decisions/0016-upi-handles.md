@@ -19,6 +19,8 @@ I could not verify the list against NPCI. NPCI's member page (`npci.org.in/produ
 2. **Confirmed by NPCI:** `paytm`, through the NPCI press release approving One97 Communications as a third-party app provider, which names the `@paytm` handle.
 3. **Single secondary source** (toolsarena.in only): `icici`, `hdfcbank`, `sbi`, `axisbank`, `yesbank`, `yesbankltd`, `fbl`, `federal`, `idfcbank`, `idbi`, `kvb`, `dbs`, `dlb`, `esaf`, `jkb`, `kbl`, `lvb`, `mahb`, `nsdl`, `pnb`, `airtel`, `psb`, `bob`, `rbl`, `boi`, `saraswat`, `cbi`, `scb`, `citi`, `sib`, `cnrb`, `tjsb`, `corporation`, `ubi`, `dena`, `ucb`, `equitas`, `fino`, `vijb`, `hsbc`, `ikwik`.
 
+**Owner check (2026-10-30):** the project owner reviewed the default list and found it fine. No written source accompanies that review.
+
 The two sources disagree on which bank sponsors `ibl`, so the bank mapping is not used anywhere. Handles change as banks merge and apps are added; a UPI ID with a handle not in the list is missed, not wrongly matched.
 
 ## Consequences
