@@ -9,8 +9,44 @@ const END = String.raw`(?![\p{L}\p{N}_])`;
 // Formats and the evidence for each: decision 0017.
 const AWS_ACCESS_KEY = compile(String.raw`${START}(?:AKIA|ASIA|ABIA|ACCA)[A-Z0-9]{16}${END}`);
 const GITHUB_TOKEN = compile(
-  String.raw`${START}(?:gh[pour]_[A-Za-z0-9]{36,255}|ghs_[A-Za-z0-9._-]{35,1023}[A-Za-z0-9_-]|github_pat_[A-Za-z0-9_]{40,255})${END}`,
+  String.raw`${START}(?:gh[pour]_[A-Za-z0-9]{36,255}|github_pat_[A-Za-z0-9_]{40,255})${END}`,
 );
+
+const GHS_PREFIX = 'ghs_';
+const GHS_CHAR = /[A-Za-z0-9._-]/;
+const TOKEN_START_BLOCKER = /[\p{L}\p{N}_-]/u;
+const WORD_CHAR = /[\p{L}\p{N}_]/u;
+const GHS_MIN_BODY = 36;
+const GHS_MAX_LENGTH = 1024;
+
+// GitHub's stateless installation tokens (ghs_<app id>_<JWT>) have no documented upper length,
+// so a regular expression with a cap would skip a longer one. This scan covers the first
+// GHS_MAX_LENGTH characters of an over-long token instead: partly covered beats uncovered, and
+// the work per token stays bounded.
+const detectGithubInstallationToken: Detector = (text) => {
+  const matches: Match[] = [];
+  let from = 0;
+  for (let at = text.indexOf(GHS_PREFIX, from); at !== -1; at = text.indexOf(GHS_PREFIX, from)) {
+    if (at > 0 && TOKEN_START_BLOCKER.test(text.charAt(at - 1))) {
+      from = at + 1;
+      continue;
+    }
+    let end = at + GHS_PREFIX.length;
+    while (end < text.length && end - at < GHS_MAX_LENGTH && GHS_CHAR.test(text.charAt(end))) end++;
+    // Resume after what was just read. Dots are token characters, so "ghs_a.ghs_a.ghs_a." is one
+    // run and restarting inside it would rescan the same characters once per prefix.
+    from = end;
+    const overLong = end < text.length && GHS_CHAR.test(text.charAt(end));
+    if (!overLong) {
+      while (end > at && text.charAt(end - 1) === '.') end--;
+      if (WORD_CHAR.test(text.charAt(end))) continue;
+    }
+    if (end - at - GHS_PREFIX.length < GHS_MIN_BODY) continue;
+    matches.push({ start: at, end, kind: 'secret', confidence: 0.98 });
+  }
+  return matches;
+};
+
 const SLACK_TOKEN = compile(String.raw`${START}(?:xox[abprs]|xapp)-[A-Za-z0-9-]{20,250}${END}`);
 // Header and payload are base64url JSON objects, so both start with "eyJ" ('{"'). The segment
 // lengths are capped so a scan can never run further than the cap from any starting point.
@@ -20,7 +56,10 @@ const JWT = compile(
 
 export const detectAwsAccessKey: Detector = (text) =>
   scan(text, AWS_ACCESS_KEY, 'secret', () => 0.95);
-export const detectGithubToken: Detector = (text) => scan(text, GITHUB_TOKEN, 'secret', () => 0.98);
+export const detectGithubToken: Detector = (text) =>
+  [...scan(text, GITHUB_TOKEN, 'secret', () => 0.98), ...detectGithubInstallationToken(text)].sort(
+    (a, b) => a.start - b.start,
+  );
 export const detectSlackToken: Detector = (text) => scan(text, SLACK_TOKEN, 'secret', () => 0.95);
 export const detectJwt: Detector = (text) => scan(text, JWT, 'secret', () => 0.9);
 

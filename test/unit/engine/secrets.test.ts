@@ -76,10 +76,33 @@ describe('detectGithubToken', () => {
     ['prefix word only', 'ghp_'],
     ['installation token too short', `ghs_${'a'.repeat(30)}`],
     ['dot-separated type that never allowed dots', `ghp_${'a'.repeat(20)}.${'b'.repeat(20)}`],
-    ['installation token over the cap', `ghs_${'a'.repeat(1100)}`],
+    ['installation token one character short', `ghs_${'a'.repeat(35)}`],
+    ['installation token short once the trailing dot is left out', `ghs_${'a'.repeat(35)}.`],
+    ['installation token inside a longer word', `xghs_${'a'.repeat(40)}`],
+    ['installation token after a hyphen', `-ghs_${'a'.repeat(40)}`],
+    ['installation token followed by a non-ASCII letter', `ghs_${'a'.repeat(40)}é`],
     ['short fine-grained token', 'github_pat_abc'],
   ])('ignores %s', (_label, text) => {
     expect(detectGithubToken(text)).toEqual([]);
+  });
+});
+
+describe('detectGithubToken installation tokens beyond the length cap', () => {
+  it('covers the first 1024 characters of an over-long token rather than skipping it', () => {
+    const text = `x ghs_${'a1_'.repeat(700)} y`;
+    expect(detectGithubToken(text)).toEqual([
+      { start: 2, end: 2 + 1024, kind: 'secret', confidence: 0.98 },
+    ]);
+  });
+
+  it('covers a token of exactly the cap in full', () => {
+    const token = `ghs_${'a'.repeat(1020)}`;
+    expect(covered(token, detectGithubToken(token))).toEqual([token]);
+  });
+
+  it('finds several tokens in one text, in order', () => {
+    const text = `${GITHUB} ${GITHUB_APP_JWT} ${GITHUB}`;
+    expect(covered(text, detectGithubToken(text))).toEqual([GITHUB, GITHUB_APP_JWT, GITHUB]);
   });
 });
 
