@@ -35,7 +35,7 @@ Known false positives, each recorded in the detector's test table:
 - UPI IDs with a handle not in the list, tokens with formats newer than those recorded in 0017, and cards from issuers not in 0015.
 - Phone numbers without a `+` that are not Indian mobiles, and Indian landlines.
 - PANs with a fourth letter outside the recorded set (0014).
-- JWTs with a part longer than the caps in 0017.
+- JWTs with a part longer than the caps in 0017. A `ghs_` token longer than 1024 characters is covered only for its first 1024.
 - Aadhaar Virtual IDs (16 digits), which have a different length and are not covered.
 
 ## Cost
