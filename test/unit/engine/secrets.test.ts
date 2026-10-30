@@ -18,6 +18,9 @@ const SLACK = ['xoxb', '123456789012', '1234567890123', 'AbCdEfGhIjKlMnOpQrStUvW
 const SLACK_APP = ['xapp', '1', 'A0123456789', '1234567890123', '0a1b2c3d4e5f6a7b8c9d'].join('-');
 const JWT =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'; // the jwt.io sample
+// GitHub's newer installation-token shape: ghs_, an app ID, then a JWT, so it holds underscores,
+// dots and hyphens and can run past 255 characters.
+const GITHUB_APP_JWT = ['ghs', '1234567', JWT].join('_');
 // A token with an empty signature (alg none) ends in a dot.
 const UNSIGNED = `${JWT.split('.').slice(0, 2).join('.')}.`;
 const RANDOM_VALUE = 'k8Jx2LmQ9vTz4RbN7wYc1HpS5dGf3AeU';
@@ -54,6 +57,10 @@ describe('detectGithubToken', () => {
     [`gho_${'Q'.repeat(36)}`, `gho_${'Q'.repeat(36)}`],
     [`ghs_${'7'.repeat(40)}`, `ghs_${'7'.repeat(40)}`],
     [GITHUB_PAT, GITHUB_PAT],
+    [GITHUB_APP_JWT, GITHUB_APP_JWT],
+    [`ghs_${'a'.repeat(600)}`, `ghs_${'a'.repeat(600)}`],
+    [`token ${GITHUB_APP_JWT}.`, GITHUB_APP_JWT],
+    [`"${GITHUB_APP_JWT}"`, GITHUB_APP_JWT],
     [`token ${GITHUB}.`, GITHUB],
     [`"${GITHUB}"`, GITHUB],
   ])('finds the token in %j', (text, expected) => {
@@ -67,6 +74,9 @@ describe('detectGithubToken', () => {
     ['letter before', `x${GITHUB}`],
     ['underscore before', `_${GITHUB}`],
     ['prefix word only', 'ghp_'],
+    ['installation token too short', `ghs_${'a'.repeat(30)}`],
+    ['dot-separated type that never allowed dots', `ghp_${'a'.repeat(20)}.${'b'.repeat(20)}`],
+    ['installation token over the cap', `ghs_${'a'.repeat(1100)}`],
     ['short fine-grained token', 'github_pat_abc'],
   ])('ignores %s', (_label, text) => {
     expect(detectGithubToken(text)).toEqual([]);

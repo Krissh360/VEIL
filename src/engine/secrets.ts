@@ -9,7 +9,7 @@ const END = String.raw`(?![\p{L}\p{N}_])`;
 // Formats and the evidence for each: decision 0017.
 const AWS_ACCESS_KEY = compile(String.raw`${START}(?:AKIA|ASIA|ABIA|ACCA)[A-Z0-9]{16}${END}`);
 const GITHUB_TOKEN = compile(
-  String.raw`${START}(?:gh[pousr]_[A-Za-z0-9]{36,255}|github_pat_[A-Za-z0-9_]{40,255})${END}`,
+  String.raw`${START}(?:gh[pour]_[A-Za-z0-9]{36,255}|ghs_[A-Za-z0-9._-]{35,1023}[A-Za-z0-9_-]|github_pat_[A-Za-z0-9_]{40,255})${END}`,
 );
 const SLACK_TOKEN = compile(String.raw`${START}(?:xox[abprs]|xapp)-[A-Za-z0-9-]{20,250}${END}`);
 // Header and payload are base64url JSON objects, so both start with "eyJ" ('{"'). The segment
